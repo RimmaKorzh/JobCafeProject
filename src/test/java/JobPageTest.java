@@ -14,6 +14,9 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +24,8 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.openqa.selenium.support.locators.RelativeLocator.with;
+import java.util.logging.Level;
+
 
 
 
@@ -31,7 +36,9 @@ public class JobPageTest extends UseCaseBase {
     protected static MainPage mainPage;
     protected static JobPage jobPage;
     protected static DisplayedResult displayedResult;
-    public static final Logger logger = LogManager.getLogger(MainPageTest.class);
+    public static final Logger logger = LogManager.getLogger(JobPageTest.class);
+
+
 
     @BeforeAll
     public static void classSetup() {
@@ -61,6 +68,7 @@ public class JobPageTest extends UseCaseBase {
 @Test
     public void locationTab() throws InterruptedException {
 
+logger.info("location filter");
     WebElement locationElement = jobPage.locationTab(By.xpath("//*[contains(text(),'Location']"));
     assertNotNull(locationElement);
     locationElement.sendKeys("Toronto");
@@ -140,7 +148,7 @@ public class JobPageTest extends UseCaseBase {
         jobPage.resetButton().click();
 
         File file = position.getScreenshotAs(OutputType.FILE);
-        FileUtils.copyFile(file,new File("position"));
+        FileUtils.copyFile(file,new File("position.png"));
 
 
 
@@ -165,7 +173,19 @@ assertTrue(isLoaded);
 
 
 }
+@Test
+    public  void  logsTest(){
 
+    LogEntries entries =UseCaseBase.getWebDriver().manage().logs().get(LogType.BROWSER);
+    List<LogEntry> logs = entries.getAll();
+
+    for(LogEntry e: logs){
+        logger.info("Message:" +e.getMessage());
+        logger.info("Level:" +e.getLevel());
+        assertNotEquals(Level.SEVERE, e.getLevel());
+    }
+
+}
 
 
 

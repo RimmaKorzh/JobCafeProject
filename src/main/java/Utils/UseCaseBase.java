@@ -14,6 +14,11 @@ public class UseCaseBase {
     private static WebDriver webDriver;
     private static BasePage page;
 
+
+    public static WebDriver getWebDriver(){
+       return webDriver;
+    }
+
     @BeforeAll
     public static void setupMain(){
         page = new BasePage();
